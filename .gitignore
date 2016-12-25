@@ -1,2 +1,7 @@
 *vcxproj*
 *.sln
+.vs
+*.VC*
+*Debug*
+ipch
+*targetver.h
