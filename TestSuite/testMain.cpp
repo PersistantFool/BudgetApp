@@ -1,9 +1,11 @@
 #include "Date.h"
+#include "Money.h"
+
 #include <iostream>
 #include <string>
 
-template <typename T>
-bool assertEqual(T lhs, T rhs, const std::string& message="")
+template <typename T, typename M>
+bool assertEqual(T lhs, M rhs, const std::string& message="")
 {
     if (lhs != rhs)
     {
@@ -17,24 +19,56 @@ bool assertEqual(T lhs, T rhs, const std::string& message="")
     return true;
 }
 
-int main(int argc, char** argv)
+bool testDate()
 {
+    bool testPassed = true;
+
     Date epoch(0);
     Date christmasEve2016(1482624068);
-    assertEqual(epoch.getYear(), static_cast<size_t>(1969));
-    assertEqual(christmasEve2016.getYear(), static_cast<size_t>(2016));
+    testPassed = assertEqual(epoch.getYear(), 1969) && testPassed;
+    testPassed = assertEqual(christmasEve2016.getYear(), 2016) && testPassed;
 
-    assertEqual(epoch.getMonth(), static_cast<size_t>(12));
-    assertEqual(christmasEve2016.getMonth(), static_cast<size_t>(12));
+    testPassed = assertEqual(epoch.getMonth(), 11) && testPassed;
+    testPassed = assertEqual(christmasEve2016.getMonth(), 11) && testPassed;
 
-    assertEqual(epoch.getDate(), static_cast<size_t>(31));
-    assertEqual(christmasEve2016.getDate(), static_cast<size_t>(24));
+    testPassed = assertEqual(epoch.getDate(), 31) && testPassed;
+    testPassed = assertEqual(christmasEve2016.getDate(), 24) && testPassed;
 
-    assertEqual(epoch.toString(), std::string("31 December 1969"));
-    assertEqual(christmasEve2016.toString(), std::string("24 December 2016"));
+    testPassed = assertEqual(epoch.toString(), "31 December 1969") && testPassed;
+    testPassed = assertEqual(christmasEve2016.toString(), "24 December 2016") && testPassed;
 
-    Date today;
-    std::cerr << today.toString() << std::endl;
+    Date todayNoArguments;
+    Date today(time(NULL));
 
+    testPassed = assertEqual(todayNoArguments, today) && testPassed;
+
+    // TODO: Increment Dates
+    return testPassed;
+}
+
+bool testMoney()
+{
+    bool testPassed = true;
+    Money noMoney;
+    Money money(3.5);
+    Money cents(-.09);
+
+    testPassed = assertEqual(money.toString(), "$3.50") && testPassed;
+    testPassed = assertEqual(noMoney.toString(), "$0.00") && testPassed;
+    testPassed = assertEqual(cents.toString(), "-$0.09") && testPassed;
+
+    testPassed = assertEqual(money + cents, Money(3.41)) && testPassed;
+    testPassed = assertEqual(money - cents, Money(3.59)) && testPassed;
+    testPassed = assertEqual(money - 1.00, Money(2.50)) && testPassed;
+
+    // TODO: Add comma thousands separator
+
+    return testPassed;
+}
+
+int main(int argc, char** argv)
+{
+    bool success = testDate();
+    success = testMoney() && success;
     return 0;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <time.h>
 
@@ -11,14 +12,18 @@ public:
     Date(time_t timestamp);
     ~Date();
 
-    size_t getYear();
-    size_t getMonth();
-    size_t getDate();
+    size_t getYear() const;
+    size_t getMonth() const;
+    std::string getMonthString() const;
+    size_t getDate() const;
 
-    std::string toString();
+    std::string toString() const;
+    bool operator==(const Date& rhs) const;
+    bool operator!=(const Date& rhs) const;
 
 private:
+    const static std::vector<std::string> monthNames;
     struct tm mDatetime;
-    std::string getMonthString();
 };
 
+std::ostream& operator<<(std::ostream& stream, const Date& rhs);
