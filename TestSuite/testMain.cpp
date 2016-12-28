@@ -42,7 +42,24 @@ bool testDate()
 
     testPassed = assertEqual(todayNoArguments, today) && testPassed;
 
-    // TODO: Increment Dates
+    size_t epochYear = epoch.getYear();
+    epoch.addYears(1);
+    testPassed = assertEqual(epochYear + 1, epoch.getYear()) && testPassed;
+    epoch.addYears(-1);
+    testPassed = assertEqual(epochYear, epoch.getYear()) && testPassed;
+
+    Date februaryTwentyNine2016(1456753041);
+    size_t startingYear = februaryTwentyNine2016.getYear();
+    size_t startingMonth = februaryTwentyNine2016.getMonth();
+    februaryTwentyNine2016.addYears(1);
+    testPassed = assertEqual(startingYear + 1, februaryTwentyNine2016.getYear()) && testPassed;
+    testPassed = assertEqual(startingMonth + 1, februaryTwentyNine2016.getMonth()) && testPassed;
+    testPassed = assertEqual(1, februaryTwentyNine2016.getDate()) && testPassed;
+
+    // TODO: Test more edges
+    // TODO: Date subtraction
+    // TODO: Write testing helpers
+    // TODO: Write better ctor
     return testPassed;
 }
 
